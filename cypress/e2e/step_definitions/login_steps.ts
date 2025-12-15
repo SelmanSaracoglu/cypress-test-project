@@ -11,16 +11,16 @@ When("I click on the Make Appointment button", () => {
 });
 
 // Step 3: Enter Username from Fixture
-When("I enter the username from {string} fixture", (fileName: string) => {
+When("I enter the {string} username from {string} fixture", (userKey: string, fileName: string) => {
   cy.fixture(fileName).then((data) => {
-    cy.get("#txt-username").type(data.validUser.username);
+    cy.get("#txt-username").type(data[userKey].username);
   });
 });
 
 // Step 4: Enter Password from Fixture
-When("I enter the password from {string} fixture", (fileName: string) => {
+When("I enter the {string} password from {string} fixture", (userKey: string, fileName: string) => {
   cy.fixture(fileName).then((data) => {
-    cy.get("#txt-password").type(data.validUser.password);
+    cy.get("#txt-password").type(data[userKey].password);
   });
 });
 
@@ -35,4 +35,10 @@ Then("I should be redirected to the appointment page", () => {
   cy.url().should("include", "#appointment");
   // Check if the header exists
   cy.get("h2").should("contain", "Make Appointment");
+});
+
+Then("I should see the error message {string}", (errorMessage: string) => {
+  cy.get(".text-danger")
+    .should("be.visible")
+    .and("contain", errorMessage);
 });
